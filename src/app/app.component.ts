@@ -24,7 +24,11 @@ export class AppComponent {
   myform: FormGroup = this.form.group({
     nombre: ['', [Validators.required, Validators.minLength(5)]],
     correo: ['', [Validators.required, Validators.email]],
-    Contraseña: ['', [Validators.required, Validators.minLength(8)]],
+    Contraseña: [
+      '',
+      [Validators.required, Validators.minLength(8), this.passwordValidator()],
+    ],
+    check: ['', [Validators.required]],
     Edad: [0, [Validators.required, this.ageValidator(18)]],
     genero: ['', [Validators.required]],
     pais: ['', [Validators.required]],
@@ -36,7 +40,7 @@ export class AppComponent {
     if (this.myform.invalid) {
       console.log('error');
     }
-    console.log('exito');
+    console.log('exito', this.myform.value);
   }
   //
 
@@ -71,5 +75,18 @@ export class AppComponent {
       }
     }
     return null;
+  }
+  passwordValidator(): ValidatorFn {
+    return (control: AbstractControl): { [key: string]: any } | null => {
+      const value = control.value;
+      if (!value) {
+        return null;
+      }
+      const hasUpperCase = /[A-Z]/.test(value);
+      const hasLowerCase = /[a-z]/.test(value);
+      const hasNumber = /[0-9]/.test(value);
+      const valid = hasUpperCase && hasLowerCase && hasNumber;
+      return !valid ? { passwordStrength: true } : null;
+    };
   }
 }

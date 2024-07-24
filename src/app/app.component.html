@@ -69,11 +69,17 @@
     </div>
     <label
       ><input
+        formControlName="check"
         type="checkbox"
         id="cbox1"
         value="first_checkbox"
       />Noticias</label
-    ><br />
+    >
+    @if(myform.controls['check'].getError('required') &&
+    myform.controls['check'].touched){
+    <span> Campo requerido </span>
+    }
+    <br />
     <div>
       <label for="pais">Pais</label>
       <select formControlName="pais" name="select" id="pais">
